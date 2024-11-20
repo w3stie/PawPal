@@ -103,3 +103,67 @@ export default function OnboardingScreen() {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingHorizontal: 20,
+    paddingTop: 40,
+    paddingBottom: 20,
+  },
+  skipButton: {
+    alignSelf: 'flex-end',
+  },
+  skipButtonText: {
+    fontSize: 16,
+    color: '#888',
+  },
+  contentContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    marginBottom: 30,
+  },
+  paginationContainer: {
+    flexDirection: 'row',
+    marginBottom: 30,
+  },
+  paginationDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#ccc',
+    marginHorizontal: 5,
+  },
+  paginationDotActive: {
+    backgroundColor: '#000',
+  },
+  heading: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 10,
+    paddingHorizontal: 20,
+  },
+  subheading: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#666',
+    paddingHorizontal: 20,
+  },
+  navigationContainer: {
+    position: 'absolute',  // Make the navigation container fixed at the bottom
+    bottom: 20,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+  },
+  navButton: {
+    padding: 10,
+  },
+})

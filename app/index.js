@@ -9,7 +9,7 @@ const Index = () => {
   useEffect(() => {
     // Navigate to the Onboarding screen after 2 seconds
     const timer = setTimeout(() => {
-      router.push('OnBoardingScreen'); // Make sure you create an onboarding.js file in the `app` folder
+      router.push('OnBoardingScreen');
     }, 2000);
 
     return () => clearTimeout(timer); // Cleanup the timer
