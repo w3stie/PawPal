@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
 import { useRouter } from 'expo-router';
 import { ArrowLeft, ArrowRight } from 'lucide-react-native';
+import { theme } from '../constants/theme';
 
 // Reusable PaginationDots component
 const PaginationDots = ({ total, active }) => (
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
   },
   skipButtonText: {
     fontSize: 16,
-    color: '#888',
+    color: theme.colors.textLight,  // Using theme color for text
   },
   contentContainer: {
     flex: 1,
@@ -134,24 +135,25 @@ const styles = StyleSheet.create({
   paginationDot: {
     width: 10,
     height: 10,
-    borderRadius: 5,
-    backgroundColor: '#ccc',
+    borderRadius: theme.radius.xs,  // Using theme radius
+    backgroundColor: theme.colors.gray, // Using theme color
     marginHorizontal: 5,
   },
   paginationDotActive: {
-    backgroundColor: '#000',
+    backgroundColor: theme.colors.primary, // Active dot color from theme
   },
   heading: {
     fontSize: 32,
-    fontWeight: 'bold',
+    fontWeight: theme.fonts.bold,  // Using theme font weight
     textAlign: 'center',
     marginBottom: 10,
     paddingHorizontal: 20,
+    color: theme.colors.text,  // Heading color from theme
   },
   subheading: {
     fontSize: 16,
     textAlign: 'center',
-    color: '#666',
+    color: theme.colors.textLight,  // Subheading color from theme
     paddingHorizontal: 20,
   },
   navigationContainer: {
