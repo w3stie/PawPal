@@ -1,12 +1,105 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
+import { useRouter } from 'expo-router';
+import { ArrowLeft, ArrowRight } from 'lucide-react-native';
 
-const OnBoardingScreen = () => {
+// Reusable PaginationDots component
+const PaginationDots = ({ total, active }) => (
+  <View style={styles.paginationContainer}>
+    {[...Array(total)].map((_, index) => (
+      <View
+        key={index}
+        style={[
+          styles.paginationDot,
+          index === active && styles.paginationDotActive,
+        ]}
+      />
+    ))}
+  </View>
+);
+
+// Reusable NavigationButton component
+const NavigationButton = ({ direction, onPress }) => (
+  <TouchableOpacity style={styles.navButton} onPress={onPress}>
+    {direction === 'left' ? (
+      <ArrowLeft size={24} color="#000" />
+    ) : (
+      <ArrowRight size={24} color="#000" />
+    )}
+  </TouchableOpacity>
+);
+
+export default function OnboardingScreen() {
+  const { width, height } = useWindowDimensions();
+  const router = useRouter();
+
+  // Data for onboarding screens
+  const onboardingData = [
+    {
+      image: require('/home/weston/PawPal/assets/images/casual-life-3d-young-woman-squatting-and-petting-dog 1.png'),
+      heading: 'Helping You to Take Good Care of Your Pets',
+      subheading: 'Chat with the smartest AI Future Experience power of AI with us.',
+    },
+    {
+      image: require('../assets/images/goat&farmer.png'),
+      heading: 'Chat With Your Favourite AI',
+      subheading: 'Get AI-powered assistance for better care of your pets.',
+    },
+    {
+      image: require('../assets/images/dog-man 1.png'),
+      heading: 'Boost Your Mind Power with AI',
+      subheading: 'Discover a smarter way to connect with your furry friends.',
+    },
+  ];
+
+  const [activeIndex, setActiveIndex] = useState(0); // Track the active onboarding step
+
+  const handleNext = () => {
+    if (activeIndex < onboardingData.length - 1) {
+      setActiveIndex(activeIndex + 1);
+    } else {
+      router.push('welcome'); // Navigate to Welcome Page
+    }
+  };
+
+  const handleBack = () => {
+    if (activeIndex > 0) {
+      setActiveIndex(activeIndex - 1);
+    }
+  };
+
+  const handleSkip = () => {
+    router.push('welcome'); // Skip directly to Welcome Page
+  };
+
+  const { image, heading, subheading } = onboardingData[activeIndex]; // Destructure data for current screen
+
   return (
-    <View>
-      <Text>OnBoardingScreen</Text>
-    </View>
-  )
-}
+    <View style={styles.container}>
+      {/* Skip Button */}
+      <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
+        <Text style={styles.skipButtonText}>Skip</Text>
+      </TouchableOpacity>
 
-export default OnBoardingScreen
+      {/* Content */}
+      <View style={styles.contentContainer}>
+        <Image
+          source={image}
+          style={[styles.image, { width: width * 0.8, height: height * 0.3 }]}
+          resizeMode="contain"
+        />
+        <PaginationDots total={onboardingData.length} active={activeIndex} />
+        <Text style={styles.heading}>{heading}</Text>
+        <Text style={styles.subheading}>{subheading}</Text>
+      </View>
+
+      {/* Navigation Buttons */}
+      <View style={styles.navigationContainer}>
+        {activeIndex > 0 && (
+          <NavigationButton direction="left" onPress={handleBack} />
+        )}
+        <NavigationButton direction="right" onPress={handleNext} />
+      </View>
+    </View>
+  );
+};
