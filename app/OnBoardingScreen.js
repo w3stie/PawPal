@@ -37,19 +37,19 @@ export default function OnboardingScreen() {
   // Data for onboarding screens
   const onboardingData = [
     {
-      image: require('/home/weston/PawPal/assets/images/casual-life-3d-young-woman-squatting-and-petting-dog 1.png'),
+      image: require('../assets/images/woman-petting-dog.png'),
       heading: 'Helping You to Take Good Care of Your Pets',
-      subheading: 'Chat with the smartest AI Future Experience power of AI with us.',
+      subheading: 'With personalized tips and expert advice, keeping your pets happy and healthy has never been easier.',
     },
     {
       image: require('../assets/images/goat&farmer.png'),
-      heading: 'Chat With Your Favourite AI',
-      subheading: 'Get AI-powered assistance for better care of your pets.',
+      heading: 'Empowering Livestock Owners with Smart Solutions',
+      subheading: "Monitor, manage, and optimize your farm animals' health with expert insights and AI-powered tools tailored for your livestock.",
     },
     {
-      image: require('../assets/images/dog-man 1.png'),
-      heading: 'Boost Your Mind Power with AI',
-      subheading: 'Discover a smarter way to connect with your furry friends.',
+      image: require('../assets/images/dog-man.png'),
+      heading: 'Strengthening the Bond Between You and Your Pet',
+      subheading: "Discover a smarter way to connect with your furry friends by understanding your pet’s needs and providing them the care they deserve..",
     },
   ];
 
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary, // Active dot color from theme
   },
   heading: {
-    fontSize: 32,
+    fontSize: 23,
     fontWeight: theme.fonts.bold,  // Using theme font weight
     textAlign: 'center',
     marginBottom: 10,
