@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { View, Text, Image,  StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import ScreenWrapper from '../components/ScreenWrapper';
+import { theme } from '../constants/theme';
 
 const Index = () => {
   const router = useRouter();
@@ -42,18 +43,18 @@ const styles = StyleSheet.create({
   },
   logoText: {
     fontSize: 32,
-    fontWeight: 'bold',
-    color: '#E74C3C',
+    fontWeight: theme.fonts.bold,  // Using theme font weight
+    color: theme.colors.primary,  // Logo text color from theme
   },
   versionText: {
     fontSize: 16,
-    color: '#7F8C8D',
+    color: theme.colors.textLight,  // Version text color from theme
     marginTop: 10,
   },
   logo: {
     flex: 1,
-    width: '50%', // Adjust logo size
-    height: '50%', // Adjust logo size
+    width: '50%', // Adjust logo size as before
+    height: '50%', // Adjust logo size as before
     justifyContent: 'center',
     alignItems: 'center',
   },
