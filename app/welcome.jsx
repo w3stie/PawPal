@@ -124,9 +124,11 @@ const styles = StyleSheet.create({
   },
   googleButton: {
     backgroundColor: '#FFCCCB',
+    paddingVertical: 16,
   },
   facebookButton: {
     backgroundColor: '#E6E6FA',
+    paddingVertical: 16,
   },
   socialButtonText: {
     color: '#D32F2F',

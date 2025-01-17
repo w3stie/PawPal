@@ -1,23 +1,71 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native';
 import { ArrowLeft, Mail, Lock, Eye, EyeOff } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { theme } from '../constants/theme';
 import ScreenWrapper from '../components/ScreenWrapper';
+import { useAuth } from '../context/AuthContext';
 
 export default function LoginScreen() {
   const router = useRouter();
+  const { signIn } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleLogin = () => {
-    if (!email || !password) {
-      alert('Please fill all fields.');
-      return;
+  const handleLogin = async () => {
+    try {
+      // Clear any previous errors
+      setError('');
+
+      // Basic validation
+      if (!email.trim() || !password.trim()) {
+        setError('Please fill all fields.');
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        setError('Please enter a valid email address.');
+        return;
+      }
+
+      setLoading(true);
+      await signIn(email.trim(), password);
+      router.push('(tabs)');
+    } catch (error) {
+      console.error('Login Error:', error.code, error.message);
+      
+      // Handle specific Firebase auth errors
+      switch (error.code) {
+        case 'auth/invalid-email':
+          setError('Please enter a valid email address.');
+          break;
+        case 'auth/missing-password':
+        case 'auth/missing-credentials':
+          setError('Please enter your password.');
+          break;
+        case 'auth/invalid-credential':
+          setError('The email or password is incorrect.');
+          break;
+        case 'auth/too-many-requests':
+          setError('Too many failed attempts. Please try again later.');
+          break;
+        case 'auth/network-request-failed':
+          setError('Network error. Please check your connection.');
+          break;
+        case 'auth/user-disabled':
+          setError('This account has been disabled. Please contact support.');
+          break;
+        default:
+          console.log('Unhandled error code:', error.code); // For debugging
+          setError('Login failed. Please try again.');
+      }
+    } finally {
+      setLoading(false);
     }
-    // Add login logic here
-    console.log('Login attempted with:', { email, password });
   };
 
   return (
@@ -35,9 +83,9 @@ export default function LoginScreen() {
               <Mail size={20} color={theme.colors.textLight} style={styles.inputIcon} />
               <TextInput
                 style={styles.input}
-                placeholder="Enter Your Email"
+              placeholder="Enter Your Email"
                 placeholderTextColor="#666666"
-                value={email}
+              value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
                 autoCapitalize="none"
@@ -48,9 +96,9 @@ export default function LoginScreen() {
               <Lock size={20} color={theme.colors.textLight} style={styles.inputIcon} />
               <TextInput
                 style={styles.input}
-                placeholder="Password"
+              placeholder="Password"
                 placeholderTextColor="#666666"
-                value={password}
+              value={password}
                 onChangeText={setPassword}
                 secureTextEntry={!showPassword}
               />
@@ -66,8 +114,18 @@ export default function LoginScreen() {
               <Text style={styles.forgotPassword}>Forgot Password?</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-              <Text style={styles.loginButtonText}>Login</Text>
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
+            <TouchableOpacity 
+              style={[styles.loginButton, loading && styles.loginButtonDisabled]}
+              onPress={handleLogin}
+              disabled={loading}
+            >
+              {loading ? (
+                <ActivityIndicator color="white" />
+              ) : (
+                <Text style={styles.loginButtonText}>Login</Text>
+              )}
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => router.push('signUpScreen')}>
@@ -203,9 +261,11 @@ const styles = StyleSheet.create({
   },
   googleButton: {
     backgroundColor: '#FFCCCB',
+    paddingVertical: 16,
   },
   facebookButton: {
     backgroundColor: '#E6E6FA',
+    paddingVertical: 16,
   },
   socialButtonText: {
     color: '#D32F2F',
@@ -221,5 +281,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  errorText: {
+    color: '#FF3B30',
+    textAlign: 'center',
+    marginBottom: theme.spacing.sm,
+  },
+  loginButtonDisabled: {
+    opacity: 0.7,
   },
 });

@@ -1,24 +1,69 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native';
 import { ArrowLeft, User, Mail, Lock, Eye, EyeOff } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { theme } from '../constants/theme';
 import ScreenWrapper from '../components/ScreenWrapper';
+import { useAuth } from '../context/AuthContext';
 
 export default function SignUpScreen() {
   const router = useRouter();
+  const { signUp } = useAuth();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleRegister = () => {
-    if (!fullName || !email || !password) {
-      alert('Please fill all fields.');
-      return;
+  const handleRegister = async () => {
+    try {
+      // Clear any previous errors
+      setError('');
+
+      // Basic validation
+      if (!fullName.trim() || !email.trim() || !password.trim()) {
+        setError('Please fill all fields.');
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        setError('Please enter a valid email address.');
+        return;
+      }
+
+      if (password.length < 6) {
+        setError('Password must be at least 6 characters long.');
+        return;
+      }
+
+      setLoading(true);
+      await signUp(email.trim(), password, fullName.trim());
+      router.push('(tabs)');
+    } catch (error) {
+      console.error('SignUp Error:', error.code, error.message);
+      
+      // Handle specific Firebase auth errors
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          setError('Email already registered. Please login instead.');
+          break;
+        case 'auth/invalid-email':
+          setError('Please enter a valid email address.');
+          break;
+        case 'auth/weak-password':
+          setError('Password should be at least 6 characters.');
+          break;
+        case 'auth/operation-not-allowed':
+          setError('Email/password registration is not enabled.');
+          break;
+        default:
+          setError('Registration failed. Please try again.');
+      }
+    } finally {
+      setLoading(false);
     }
-    alert('Registered successfully!');
-    // Add your registration logic here
   };
 
   return (
@@ -74,8 +119,18 @@ export default function SignUpScreen() {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
-              <Text style={styles.registerButtonText}>Register</Text>
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
+            <TouchableOpacity 
+              style={[styles.registerButton, loading && styles.registerButtonDisabled]}
+              onPress={handleRegister}
+              disabled={loading}
+            >
+              {loading ? (
+                <ActivityIndicator color="white" />
+              ) : (
+                <Text style={styles.registerButtonText}>Register</Text>
+              )}
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => router.push('loginScreen')}>
@@ -206,9 +261,11 @@ const styles = StyleSheet.create({
   },
   googleButton: {
     backgroundColor: '#FFCCCB',
+    paddingVertical: 16,
   },
   facebookButton: {
     backgroundColor: '#E6E6FA',
+    paddingVertical: 16,
   },
   socialButtonText: {
     color: '#D32F2F',
@@ -224,6 +281,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  errorText: {
+    color: '#FF3B30',
+    textAlign: 'center',
+    marginBottom: theme.spacing.sm,
+  },
+  registerButtonDisabled: {
+    opacity: 0.7,
   },
 });
 

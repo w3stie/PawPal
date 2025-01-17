@@ -1,15 +1,20 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { Stack } from 'expo-router'
+import React from 'react';
+import { Stack } from 'expo-router';
+import { AuthProvider } from '../context/AuthContext';
 
-const _layout = () => {
+export default function RootLayout() {
   return (
-    <Stack 
-        screenOptions = {{
-            headerShown: false
+    <AuthProvider>
+      <Stack 
+        screenOptions={{
+          headerShown: false,
         }}
-    />
-  )
+      >
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="welcome" options={{ headerShown: false }} />
+        <Stack.Screen name="loginScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="signUpScreen" options={{ headerShown: false }} />
+      </Stack>
+    </AuthProvider>
+  );
 }
-
-export default _layout
