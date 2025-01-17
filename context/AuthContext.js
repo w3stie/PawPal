@@ -6,12 +6,15 @@ import {
   updateProfile,
   signOut as firebaseSignOut
 } from 'firebase/auth';
+import { useGoogleAuth } from '../config/googleAuth';
 
 const AuthContext = createContext({});
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const { signInWithGoogle } = useGoogleAuth();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -83,6 +86,16 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const googleSignIn = async () => {
+    try {
+      const user = await signInWithGoogle();
+      return user;
+    } catch (error) {
+      console.error('Google Sign In Error:', error);
+      throw error;
+    }
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -90,6 +103,7 @@ export function AuthProvider({ children }) {
       signUp,
       signIn,
       signOut,
+      googleSignIn,
     }}>
       {!loading && children}
     </AuthContext.Provider>

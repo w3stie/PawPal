@@ -8,7 +8,7 @@ import { useAuth } from '../context/AuthContext';
 
 export default function SignUpScreen() {
   const router = useRouter();
-  const { signUp } = useAuth();
+  const { signUp, googleSignIn } = useAuth();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -60,6 +60,32 @@ export default function SignUpScreen() {
           break;
         default:
           setError('Registration failed. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      await googleSignIn();
+      router.replace('/(tabs)');
+    } catch (error) {
+      console.error('Google Sign In Error:', error);
+      switch (error.code) {
+        case 'auth/popup-closed-by-user':
+          setError('Sign in cancelled.');
+          break;
+        case 'auth/popup-blocked':
+          setError('Pop-up was blocked. Please enable pop-ups for this site.');
+          break;
+        case 'auth/account-exists-with-different-credential':
+          setError('An account already exists with the same email address.');
+          break;
+        default:
+          setError('Failed to sign in with Google. Please try again.');
       }
     } finally {
       setLoading(false);
@@ -145,10 +171,19 @@ export default function SignUpScreen() {
 
             <View style={styles.socialContainer}>
               <TouchableOpacity 
-                style={[styles.socialButton, styles.googleButton]}
-                onPress={() => console.log('Google sign up')}
+                style={[
+                  styles.socialButton, 
+                  styles.googleButton,
+                  loading && styles.buttonDisabled
+                ]}
+                onPress={handleGoogleSignIn}
+                disabled={loading}
               >
-                <Text style={styles.socialButtonText}>GOOGLE</Text>
+                {loading ? (
+                  <ActivityIndicator color="#D32F2F" />
+                ) : (
+                  <Text style={styles.socialButtonText}>GOOGLE</Text>
+                )}
               </TouchableOpacity>
               <View style={styles.buttonSpacer} />
               <TouchableOpacity 
@@ -288,6 +323,9 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.sm,
   },
   registerButtonDisabled: {
+    opacity: 0.7,
+  },
+  buttonDisabled: {
     opacity: 0.7,
   },
 });

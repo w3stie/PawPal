@@ -8,7 +8,7 @@ import { useAuth } from '../context/AuthContext';
 
 export default function LoginScreen() {
   const router = useRouter();
-  const { signIn } = useAuth();
+  const { signIn, googleSignIn } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -68,6 +68,40 @@ export default function LoginScreen() {
         default:
           console.log('Unhandled error code:', error.code); // For debugging
           setError('Login failed. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      console.log('Starting Google Sign In from login screen...');
+      
+      const user = await googleSignIn();
+      console.log('Google Sign In Result:', user?.email);
+      
+      if (user) {
+        router.replace('/(tabs)');
+      } else {
+        setError('Google sign in was cancelled or failed');
+      }
+    } catch (error) {
+      console.error('Google Sign In Error in UI:', error);
+      switch (error.code) {
+        case 'auth/popup-closed-by-user':
+          setError('Sign in cancelled.');
+          break;
+        case 'auth/popup-blocked':
+          setError('Pop-up was blocked. Please enable pop-ups for this site.');
+          break;
+        case 'auth/account-exists-with-different-credential':
+          setError('An account already exists with the same email address.');
+          break;
+        default:
+          setError(error.message || 'Failed to sign in with Google. Please try again.');
       }
     } finally {
       setLoading(false);
@@ -146,10 +180,19 @@ export default function LoginScreen() {
 
             <View style={styles.socialContainer}>
               <TouchableOpacity 
-                style={[styles.socialButton, styles.googleButton]}
-                onPress={() => console.log('Google login')}
+                style={[
+                  styles.socialButton, 
+                  styles.googleButton,
+                  loading && styles.buttonDisabled
+                ]}
+                onPress={handleGoogleSignIn}
+                disabled={loading}
               >
-                <Text style={styles.socialButtonText}>GOOGLE</Text>
+                {loading ? (
+                  <ActivityIndicator color="#D32F2F" />
+                ) : (
+                  <Text style={styles.socialButtonText}>GOOGLE</Text>
+                )}
               </TouchableOpacity>
               <View style={styles.buttonSpacer} />
               <TouchableOpacity 
@@ -268,6 +311,10 @@ const styles = StyleSheet.create({
   googleButton: {
     backgroundColor: '#FFCCCB',
     paddingVertical: 16,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 8,
   },
   facebookButton: {
     backgroundColor: '#E6E6FA',
@@ -275,7 +322,6 @@ const styles = StyleSheet.create({
   },
   socialButtonText: {
     color: '#D32F2F',
-    textAlign: 'center',
     fontSize: 14,
     fontWeight: theme.fonts.bold,
   },
@@ -294,6 +340,9 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.sm,
   },
   loginButtonDisabled: {
+    opacity: 0.7,
+  },
+  buttonDisabled: {
     opacity: 0.7,
   },
 });
