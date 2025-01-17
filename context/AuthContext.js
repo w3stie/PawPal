@@ -15,6 +15,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
+      console.log('Auth state changed:', user?.email);
       setUser(user);
       setLoading(false);
     });
@@ -44,19 +45,30 @@ export function AuthProvider({ children }) {
   const signIn = async (email, password) => {
     try {
       if (!email || !password) {
-        throw new Error('auth/missing-credentials');
+        throw { code: 'auth/missing-credentials' };
       }
       
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      if (!userCredential.user) {
-        throw new Error('auth/invalid-credential');
+      const userCredential = await signInWithEmailAndPassword(auth, email, password)
+        .catch(error => {
+          // Handle specific Firebase errors
+          if (error.code === 'auth/invalid-login-credentials' || 
+              error.code === 'auth/wrong-password' || 
+              error.code === 'auth/user-not-found') {
+            throw { code: 'auth/invalid-credential' };
+          }
+          throw error;
+        });
+
+      if (!userCredential?.user) {
+        throw { code: 'auth/invalid-credential' };
       }
+
       return userCredential;
     } catch (error) {
-      console.error('Login error:', error.code || error.message);
-      // Normalize error codes
-      if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
-        throw { code: 'auth/invalid-credential' };
+      console.error('Login error:', error.code);
+      // Make sure we always throw an error with a code property
+      if (!error.code) {
+        throw { code: 'auth/unknown' };
       }
       throw error;
     }

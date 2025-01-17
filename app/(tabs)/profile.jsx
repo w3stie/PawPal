@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
 import { theme } from '../../constants/theme';
 import ScreenWrapper from '../../components/ScreenWrapper';
 import { useAuth } from '../../context/AuthContext';
@@ -17,11 +17,6 @@ export default function ProfileScreen() {
           </View>
           <Text style={styles.name}>{user?.displayName || 'User'}</Text>
           <Text style={styles.email}>{user?.email}</Text>
-          
-          <View style={styles.infoContainer}>
-            <Text style={styles.infoTitle}>Account Information</Text>
-            {/* Add more profile information here */}
-          </View>
         </View>
       </SafeAreaView>
     </ScreenWrapper>
@@ -51,23 +46,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: theme.fonts.bold,
     color: theme.colors.text,
-    marginBottom: theme.spacing.xs,
   },
   email: {
     fontSize: 16,
     color: theme.colors.textLight,
-    marginBottom: theme.spacing.lg,
-  },
-  infoContainer: {
-    width: '100%',
-    padding: theme.spacing.md,
-    backgroundColor: '#f8f8f8',
-    borderRadius: theme.radius.md,
-  },
-  infoTitle: {
-    fontSize: 18,
-    fontWeight: theme.fonts.semibold,
-    color: theme.colors.text,
-    marginBottom: theme.spacing.sm,
+    marginTop: theme.spacing.sm,
   },
 }); 

@@ -1,9 +1,10 @@
 import { Tabs } from 'expo-router';
 import { useAuth } from '../../context/AuthContext';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Home, User, Settings } from 'lucide-react-native';
 import { theme } from '../../constants/theme';
+import { View, Text, ActivityIndicator } from 'react-native';
 
 export default function TabsLayout() {
   const { user } = useAuth();
@@ -29,7 +30,7 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen
-        name="home"
+        name="index"
         options={{
           title: 'Home',
           tabBarIcon: ({ color, size }) => <Home size={size} color={color} />,

@@ -40,7 +40,7 @@ export default function SignUpScreen() {
 
       setLoading(true);
       await signUp(email.trim(), password, fullName.trim());
-      router.push('(tabs)');
+      router.replace('/(tabs)');
     } catch (error) {
       console.error('SignUp Error:', error.code, error.message);
       

@@ -34,9 +34,9 @@ export default function LoginScreen() {
 
       setLoading(true);
       await signIn(email.trim(), password);
-      router.push('(tabs)');
+      router.replace('/(tabs)');
     } catch (error) {
-      console.error('Login Error:', error.code, error.message);
+      console.error('Login Error:', error.code);
       
       // Handle specific Firebase auth errors
       switch (error.code) {
@@ -48,6 +48,9 @@ export default function LoginScreen() {
           setError('Please enter your password.');
           break;
         case 'auth/invalid-credential':
+        case 'auth/invalid-login-credentials':
+        case 'auth/wrong-password':
+        case 'auth/user-not-found':
           setError('The email or password is incorrect.');
           break;
         case 'auth/too-many-requests':
@@ -58,6 +61,9 @@ export default function LoginScreen() {
           break;
         case 'auth/user-disabled':
           setError('This account has been disabled. Please contact support.');
+          break;
+        case 'auth/unknown':
+          setError('An unexpected error occurred. Please try again.');
           break;
         default:
           console.log('Unhandled error code:', error.code); // For debugging
