@@ -35,8 +35,8 @@ export default function SignUpScreen() {
 
       if (password.length < 6) {
         setError('Password must be at least 6 characters long.');
-        return;
-      }
+      return;
+    }
 
       setLoading(true);
       await signUp(email.trim(), password, fullName.trim());
@@ -94,56 +94,56 @@ export default function SignUpScreen() {
 
   return (
     <ScreenWrapper>
-      <SafeAreaView style={styles.container}>
-        <View style={styles.content}>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
           <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
             <ArrowLeft size={24} color={theme.colors.text} />
-          </TouchableOpacity>
+        </TouchableOpacity>
 
-          <Text style={styles.title}>Create your Account</Text>
+        <Text style={styles.title}>Create your Account</Text>
 
           <View style={styles.formContainer}>
-            <View style={styles.inputContainer}>
+        <View style={styles.inputContainer}>
               <User size={20} color={theme.colors.textLight} style={styles.inputIcon} />
-              <TextInput
-                style={styles.input}
-                placeholder="Full Name"
+          <TextInput
+            style={styles.input}
+            placeholder="Full Name"
                 placeholderTextColor="#666666"
-                value={fullName}
-                onChangeText={setFullName}
-              />
-            </View>
+            value={fullName}
+            onChangeText={setFullName}
+          />
+        </View>
 
-            <View style={styles.inputContainer}>
+        <View style={styles.inputContainer}>
               <Mail size={20} color={theme.colors.textLight} style={styles.inputIcon} />
-              <TextInput
-                style={styles.input}
-                placeholder="Enter Your Email"
+          <TextInput
+            style={styles.input}
+            placeholder="Enter Your Email"
                 placeholderTextColor="#666666"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
-            </View>
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+        </View>
 
-            <View style={styles.inputContainer}>
+        <View style={styles.inputContainer}>
               <Lock size={20} color={theme.colors.textLight} style={styles.inputIcon} />
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
                 placeholderTextColor="#666666"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={!showPassword}
-              />
-              <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeIcon}>
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!showPassword}
+          />
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeIcon}>
                 {showPassword ? 
                   <EyeOff size={20} color={theme.colors.textLight} /> : 
                   <Eye size={20} color={theme.colors.textLight} />
                 }
-              </TouchableOpacity>
-            </View>
+          </TouchableOpacity>
+        </View>
 
             {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
@@ -155,22 +155,22 @@ export default function SignUpScreen() {
               {loading ? (
                 <ActivityIndicator color="white" />
               ) : (
-                <Text style={styles.registerButtonText}>Register</Text>
+          <Text style={styles.registerButtonText}>Register</Text>
               )}
-            </TouchableOpacity>
+        </TouchableOpacity>
 
             <TouchableOpacity onPress={() => router.push('loginScreen')}>
-              <Text style={styles.signInText}>
-                Already Have An Account? <Text style={styles.signInLink}>Sign In</Text>
-              </Text>
-            </TouchableOpacity>
+          <Text style={styles.signInText}>
+            Already Have An Account? <Text style={styles.signInLink}>Sign In</Text>
+          </Text>
+        </TouchableOpacity>
 
             <View style={styles.divider} />
 
             <Text style={styles.continueText}>Continue With Accounts</Text>
 
-            <View style={styles.socialContainer}>
-              <TouchableOpacity 
+        <View style={styles.socialContainer}>
+          <TouchableOpacity 
                 style={[
                   styles.socialButton, 
                   styles.googleButton,
@@ -182,20 +182,20 @@ export default function SignUpScreen() {
                 {loading ? (
                   <ActivityIndicator color="#D32F2F" />
                 ) : (
-                  <Text style={styles.socialButtonText}>GOOGLE</Text>
+            <Text style={styles.socialButtonText}>GOOGLE</Text>
                 )}
-              </TouchableOpacity>
+          </TouchableOpacity>
               <View style={styles.buttonSpacer} />
-              <TouchableOpacity 
-                style={[styles.socialButton, styles.facebookButton]}
+          <TouchableOpacity 
+            style={[styles.socialButton, styles.facebookButton]}
                 onPress={() => console.log('Facebook sign up')}
-              >
+          >
                 <Text style={styles.facebookButtonText}>FACEBOOK</Text>
-              </TouchableOpacity>
+          </TouchableOpacity>
             </View>
-          </View>
         </View>
-      </SafeAreaView>
+      </View>
+    </SafeAreaView>
     </ScreenWrapper>
   );
 }

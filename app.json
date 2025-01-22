@@ -25,6 +25,9 @@
     "experiments": {
       "typedRoutes": true
     },
-    "owner": "w3stie"
+    "owner": "w3stie",
+    "facebookScheme": "fbYOUR_FACEBOOK_APP_ID",
+    "facebookAppId": "YOUR_FACEBOOK_APP_ID",
+    "facebookDisplayName": "PawPal"
   }
 }

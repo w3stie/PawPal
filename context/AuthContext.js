@@ -7,6 +7,7 @@ import {
   signOut as firebaseSignOut
 } from 'firebase/auth';
 import { useGoogleAuth } from '../config/googleAuth';
+import { useFacebookAuth } from '../config/facebookAuth';
 
 const AuthContext = createContext({});
 
@@ -15,6 +16,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   const { signInWithGoogle } = useGoogleAuth();
+  const { signInWithFacebook } = useFacebookAuth();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -96,6 +98,16 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const facebookSignIn = async () => {
+    try {
+      const user = await signInWithFacebook();
+      return user;
+    } catch (error) {
+      console.error('Facebook Sign In Error:', error);
+      throw error;
+    }
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -104,6 +116,7 @@ export function AuthProvider({ children }) {
       signIn,
       signOut,
       googleSignIn,
+      facebookSignIn,
     }}>
       {!loading && children}
     </AuthContext.Provider>

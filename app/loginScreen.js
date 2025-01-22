@@ -8,7 +8,7 @@ import { useAuth } from '../context/AuthContext';
 
 export default function LoginScreen() {
   const router = useRouter();
-  const { signIn, googleSignIn } = useAuth();
+  const { signIn, googleSignIn, facebookSignIn } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -17,7 +17,6 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      // Clear any previous errors
       setError('');
 
       // Basic validation
@@ -33,8 +32,15 @@ export default function LoginScreen() {
       }
 
       setLoading(true);
-      await signIn(email.trim(), password);
-      router.replace('/(tabs)');
+      const result = await signIn(email.trim(), password);
+      
+      // Only navigate if we have a successful sign in
+      if (result?.user) {
+        console.log('Login successful:', result.user.email);
+        router.replace('/(tabs)');
+      } else {
+        setError('Login failed. Please try again.');
+      }
     } catch (error) {
       console.error('Login Error:', error.code);
       
@@ -66,7 +72,7 @@ export default function LoginScreen() {
           setError('An unexpected error occurred. Please try again.');
           break;
         default:
-          console.log('Unhandled error code:', error.code); // For debugging
+          console.log('Unhandled error code:', error.code);
           setError('Login failed. Please try again.');
       }
     } finally {
@@ -102,6 +108,43 @@ export default function LoginScreen() {
           break;
         default:
           setError(error.message || 'Failed to sign in with Google. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFacebookSignIn = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      console.log('Starting Facebook Sign In...');
+      
+      const user = await facebookSignIn();
+      console.log('Facebook Sign In Result:', user?.email);
+      
+      if (user) {
+        router.replace('/(tabs)');
+      } else {
+        setError('Facebook sign in was cancelled or failed');
+      }
+    } catch (error) {
+      console.error('Facebook Sign In Error:', error);
+      switch (error.code) {
+        case 'auth/account-exists-with-different-credential':
+          setError('An account already exists with the same email address.');
+          break;
+        case 'auth/popup-blocked':
+          setError('Pop-up was blocked. Please enable pop-ups for this site.');
+          break;
+        case 'auth/cancelled-popup-request':
+          setError('Sign in cancelled.');
+          break;
+        case 'auth/operation-not-allowed':
+          setError('Facebook sign-in is not enabled. Please contact support.');
+          break;
+        default:
+          setError('Failed to sign in with Facebook. Please try again.');
       }
     } finally {
       setLoading(false);
@@ -197,9 +240,14 @@ export default function LoginScreen() {
               <View style={styles.buttonSpacer} />
               <TouchableOpacity 
                 style={[styles.socialButton, styles.facebookButton]}
-                onPress={() => console.log('Facebook login')}
+                onPress={handleFacebookSignIn}
+                disabled={loading}
               >
-                <Text style={styles.facebookButtonText}>FACEBOOK</Text>
+                {loading ? (
+                  <ActivityIndicator color="#483D8B" />
+                ) : (
+                  <Text style={styles.facebookButtonText}>FACEBOOK</Text>
+                )}
               </TouchableOpacity>
             </View>
           </View>
