@@ -1,7 +1,7 @@
 // Example constants file
 export const API_URL = __DEV__ 
   ? 'http://localhost:5000'  // Development URL
-  : 'https://pawpal-api.onrender.com'; // Production URL - You'll need to replace this with your actual production URL
+  : 'https://pawpal-backend-ofya.onrender.com'; // Production URL - You'll need to replace this with your actual production URL
 
 export const SOME_OTHER_CONSTANT = 'someValue'; 
 
