@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Home, User, Settings } from 'lucide-react-native';
+import { MessageCircle } from 'lucide-react-native';
 import { theme } from '../../constants/theme';
 import { View, Text, ActivityIndicator } from 'react-native';
 
@@ -33,14 +34,21 @@ export default function TabsLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color, size }) => <Home size={size} color={color} />,
+          tabBarIcon: ({ color }) => <Home size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="askpaw"
+        options={{
+          title: 'AskPaw',
+          tabBarIcon: ({ color }) => <MessageCircle size={24} color={color} />,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color, size }) => <User size={size} color={color} />,
+          tabBarIcon: ({ color }) => <User size={24} color={color} />,
         }}
       />
       <Tabs.Screen

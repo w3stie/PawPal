@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Image, Platform } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import { Menu, MapPin, Cat, Dog, Cow, Bird, Fish, Rabbit, MessageCircle } from 'lucide-react-native';
 import { theme } from '../../constants/theme';
@@ -46,12 +46,12 @@ export default function HomeScreen() {
               <Menu size={24} color={theme.colors.text} />
             </TouchableOpacity>
             
-            <TouchableOpacity style={styles.locationContainer}>
+            <View style={styles.locationContainer}>
               <MapPin size={20} color={theme.colors.primary} />
               <Text style={styles.locationText}>Nairobi, Kenya</Text>
-            </TouchableOpacity>
+            </View>
             
-            <View style={styles.menuPlaceholder} />
+            <View style={styles.menuButton} />
           </View>
 
           {/* Welcome Section */}
@@ -175,24 +175,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.md,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
   menuButton: {
-    padding: theme.spacing.sm,
-  },
-  menuPlaceholder: {
-    width: 40, // Same width as menuButton for balance
+    width: 40,
+    alignItems: 'flex-start',
   },
   locationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.xs,
+    justifyContent: 'center',
+    flex: 1,
   },
   locationText: {
+    marginLeft: 8,
     fontSize: 16,
     color: theme.colors.text,
-    fontWeight: theme.fonts.medium,
+    fontWeight: '500',
   },
   welcomeSection: {
     padding: theme.spacing.lg,
@@ -393,6 +393,16 @@ const styles = StyleSheet.create({
     fontWeight: theme.fonts.semibold,
     color: theme.colors.text,
     textAlign: 'center',
+  },
+  someStyle: {
+    boxShadow: '0px 2px 2px rgba(0, 0, 0, 0.8)',
+  },
+  card: {
+    boxShadow: Platform.select({
+      ios: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+      android: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+      web: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+    }),
   },
 });
 
