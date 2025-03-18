@@ -10,7 +10,7 @@ export default function WelcomeScreen() {
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <Image
-          source={require('../assets/images/Pawpal_logo-removebg-preview.png')}
+          source={require('../assets/images/mainLogo.png')}
           style={styles.logo}
           resizeMode="contain"
         />

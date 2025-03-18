@@ -20,7 +20,7 @@ const Index = () => {
     <ScreenWrapper>
       <View style={styles.container}>
       <Image
-          source={require('../assets/images/Pawpal_logo-removebg-preview.png')} // Ensure you have your logo image in the assets folder
+          source={require('../assets/images/mainLogo.png')} // Ensure you have your logo image in the assets folder
           style={styles.logo}
           resizeMode="contain"
         />

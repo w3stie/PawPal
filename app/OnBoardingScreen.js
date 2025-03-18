@@ -37,17 +37,17 @@ export default function OnboardingScreen() {
   // Data for onboarding screens
   const onboardingData = [
     {
-      image: require('../assets/images/woman-petting-dog.png'),
+      image: require('../assets/images/onBoard1.png'),
       heading: 'Helping You to Take Good Care of Your Pets',
       subheading: 'With personalized tips and expert advice, keeping your pets happy and healthy has never been easier.',
     },
     {
-      image: require('../assets/images/goat&farmer.png'),
+      image: require('../assets/images/onBoard2.png'),
       heading: 'Empowering Livestock Owners with Smart Solutions',
       subheading: "Monitor, manage, and optimize your farm animals' health with expert insights and AI-powered tools tailored for your livestock.",
     },
     {
-      image: require('../assets/images/dog-man.png'),
+      image: require('../assets/images/onBoard3.png'),
       heading: 'Strengthening the Bond Between You and Your Pet',
       subheading: "Discover a smarter way to connect with your furry friends by understanding your pet’s needs and providing them the care they deserve..",
     },
