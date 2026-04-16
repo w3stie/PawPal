@@ -1,4 +1,6 @@
-# Welcome to your Expo app 👋
+# Welcome to Pawpal, Your pet wellness app by Expo
+<img width="2560" height="2560" alt="de032344-7a62-4380-bfe8-a66567d0a7d8" src="https://github.com/user-attachments/assets/38cbb9bd-6cb1-4a4b-925c-c5ebe03d01a3" />
+
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
